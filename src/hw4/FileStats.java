@@ -44,7 +44,10 @@ class FileStats{
 				/* insert your code here */
 				StringTokenizer st = new StringTokenizer(line);
 				while(st.hasMoreTokens()){
-					System.out.println(st.nextToken());
+					wordList.add(st.nextToken());
+					if ( !wordList.contains(st.nextToken()) ){
+						wordSet.add(st.nextToken());
+					}
 				}
 			}
 		} catch (NoSuchElementException e) {
