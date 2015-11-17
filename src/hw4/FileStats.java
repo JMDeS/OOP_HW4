@@ -4,7 +4,9 @@ import java.io.*;
 import java.util.*;
 
 class FileStats{
-	private Scanner input;
+	private String path = "basketball.txt";
+	private Scanner input; // = new Scanner(new FileInputStream(path));
+//	private InputStream input; //= new BufferedInputStream(new FileInputStream(path));
 	private ArrayList <String> wordList=new ArrayList<String>();
 	private HashSet <String> wordSet=new HashSet<String>();
 	private ArrayList <Entry<String>> entryList=new ArrayList<Entry<String>>();
@@ -28,8 +30,29 @@ class FileStats{
 
 		/* insert your code here */
 		/* open the file, named path */
-
-
+		
+		try {
+			input = new Scanner(new File(path));
+		} catch (FileNotFoundException e) {
+			System.out.println("Error openning file..");
+			System.exit(1);
+		}
+		try {
+			String line;
+			
+			while ((line = input.nextLine()) != null) {
+				/* insert your code here */
+				StringTokenizer st = new StringTokenizer(line);
+				while(st.hasMoreTokens()){
+					System.out.println(st.nextToken());
+				}
+			}
+		} catch (NoSuchElementException e) {
+			// no more lines in the file
+			// no handler is necessary
+		}
+		
+	
 		count();
 	}
 
