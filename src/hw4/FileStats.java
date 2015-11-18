@@ -27,9 +27,6 @@ class FileStats{
 	}
 
 	public FileStats(String path) {
-
-		/* insert your code here */
-		/* open the file, named path */
 		
 		try {
 			input = new Scanner(new File(path));
@@ -41,12 +38,13 @@ class FileStats{
 			String line;
 			
 			while ((line = input.nextLine()) != null) {
-				/* insert your code here */
 				StringTokenizer st = new StringTokenizer(line);
 				while(st.hasMoreTokens()){
-					wordList.add(st.nextToken());
-					if ( !wordList.contains(st.nextToken()) ){
-						wordSet.add(st.nextToken());
+					wordList.add(st.nextToken().toLowerCase());
+					if ( !wordList.contains(st.nextToken().toLowerCase()) ){
+						wordSet.add(st.nextToken().toLowerCase());
+						//System.out.println(st.nextToken());
+						
 					}
 				}
 			}
@@ -54,8 +52,10 @@ class FileStats{
 			// no more lines in the file
 			// no handler is necessary
 		}
-		
-	
+		for ( String word : wordSet ) {
+			System.out.print(word +  ": ");
+			System.out.println(Collections.frequency(wordList,  word));
+		}
 		count();
 	}
 
@@ -68,7 +68,11 @@ class FileStats{
 	 *    used to represent the words.
 	 */
 	private void count() {
-		/* insert your code here */
+//		for (int i = 0; i < 4; i++) {
+//			System.out.println(entryList.get(i).s + " appears "
+//					+ entryList.get(i).frequency + " time(s).");
+//		}
+		
 	}
 
 	public Map<String, Character> getCompressDict(){
