@@ -4,14 +4,14 @@ import java.io.*;
 import java.util.*;
 
 class FileStats{
-	private String path = "basketball.txt";
-	private Scanner input; // = new Scanner(new FileInputStream(path));
-//	private InputStream input; //= new BufferedInputStream(new FileInputStream(path));
+	
+	private Scanner input; 
 	private ArrayList <String> wordList=new ArrayList<String>();
+	private ArrayList <Character> punctuation=new ArrayList<Character>();
 	private HashSet <String> wordSet=new HashSet<String>();
 	private ArrayList <Entry<String>> entryList=new ArrayList<Entry<String>>();
 	private Map <String, Character> dictStr2Char=new TreeMap<String, Character>();
-	private Map <Character, String> dictChar2Str=new TreeMap<Character, String>();
+	private Map <Character, String> dictChar2Str=new HashMap<Character, String>();
 	
 	private class Entry <T> implements Comparable<Entry<T>>{
 		public T s;
@@ -21,13 +21,12 @@ class FileStats{
 			frequency=f;
 		}
 		public int compareTo(Entry<T> e){
-			// insert your code
-			return 0; // stub
+			return e.frequency - this.frequency;
 		}
 	}
 
 	public FileStats(String path) {
-		
+		setupPunctuationList();
 		try {
 			input = new Scanner(new File(path));
 		} catch (FileNotFoundException e) {
@@ -40,22 +39,19 @@ class FileStats{
 			while ((line = input.nextLine()) != null) {
 				StringTokenizer st = new StringTokenizer(line);
 				while(st.hasMoreTokens()){
-					wordList.add(st.nextToken().toLowerCase());
-					if ( !wordList.contains(st.nextToken().toLowerCase()) ){
-						wordSet.add(st.nextToken().toLowerCase());
-						//System.out.println(st.nextToken());
-						
-					}
-				}
-			}
+					String nextWord = st.nextToken().toLowerCase();
+					
+					wordList.add(nextWord);
+					wordSet.add(nextWord);
+				
+				} // end inner while
+			} // end outer while
 		} catch (NoSuchElementException e) {
 			// no more lines in the file
 			// no handler is necessary
 		}
-		for ( String word : wordSet ) {
-			System.out.print(word +  ": ");
-			System.out.println(Collections.frequency(wordList,  word));
-		}
+		
+		setupDicts();
 		count();
 	}
 
@@ -68,11 +64,19 @@ class FileStats{
 	 *    used to represent the words.
 	 */
 	private void count() {
-//		for (int i = 0; i < 4; i++) {
-//			System.out.println(entryList.get(i).s + " appears "
-//					+ entryList.get(i).frequency + " time(s).");
-//		}
+	
+		for ( String word : wordSet ) {
+			int freq = Collections.frequency(wordList,  word);
+			Entry entry = new Entry(word,freq);
+			entryList.add(entry);
+		}
 		
+		Collections.sort(entryList);
+		
+		for (int i = 0; i < 4; i++) {
+			System.out.println(entryList.get(i).s + " appears "
+					+ entryList.get(i).frequency + " time(s).");
+		}
 	}
 
 	public Map<String, Character> getCompressDict(){
@@ -85,6 +89,30 @@ class FileStats{
 	/*	DO SOMETHING  */
 	public int printDictionary(){ 
 		return 0; // stub
+	}
+	
+	private void setupPunctuationList() {
+		punctuation.add('.');
+		punctuation.add('\'');
+		punctuation.add(',');
+		punctuation.add('?');
+		punctuation.add(';');
+	}
+	
+	private void setupDicts(){
+		dictStr2Char.put("and", '#');
+		dictStr2Char.put("basketball", '$');
+		dictStr2Char.put("is", '*');
+		dictStr2Char.put("the", '%');
+		
+		dictChar2Str.put('#', "and");
+		dictChar2Str.put('$', "basketball");
+		dictChar2Str.put('*', "is");
+		dictChar2Str.put('%', "the");
+	}
+	
+	ArrayList<String> getWordList(){
+		return wordList;
 	}
 }
 
