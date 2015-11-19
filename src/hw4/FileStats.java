@@ -12,6 +12,7 @@ class FileStats{
 	private ArrayList <Entry<String>> entryList=new ArrayList<Entry<String>>();
 	private Map <String, Character> dictStr2Char=new TreeMap<String, Character>();
 	private Map <Character, String> dictChar2Str=new HashMap<Character, String>();
+	private String lineBreak = "lineBreak"; 
 	
 	private class Entry <T> implements Comparable<Entry<T>>{
 		public T s;
@@ -45,6 +46,7 @@ class FileStats{
 					wordSet.add(nextWord);
 				
 				} // end inner while
+				wordList.add(lineBreak);
 			} // end outer while
 		} catch (NoSuchElementException e) {
 			// no more lines in the file

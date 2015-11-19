@@ -23,8 +23,8 @@ public class FileCompressor{
 	
 	public static void compress(String src, String dest,
 									Map<String, Character> dictionary){
-		FileStats fs = new FileStats(path);
-		ArrayList<String> wordList = fs.getWordList();			
+		FileStats fileStats = new FileStats(path);
+		ArrayList<String> wordList = fileStats.getWordList();			
 		File outFile = null;
 			      
 	    try{	         
@@ -33,10 +33,17 @@ public class FileCompressor{
 	      outFile.delete();
 	      outFile.createNewFile();
 	      
-	      Set<String> keySet = fs.getCompressDict().keySet();
+	      Set<String> keySet = fileStats.getCompressDict().keySet();
 	    	for ( String word : wordList ) {
 	    		for ( String key : keySet ) {
 	 	    		if ( word.equals(key) ) {
+	 	    			/* sets keyword to its corresponding value 
+	 	    			* and replaces this instance of it with 
+	 	    			* its value in wordList	*/
+	 	    			wordList.set(  
+	 	    						wordList.indexOf(word),		// << index of word
+	 	    						fileStats.getCompressDict().get(word).toString());  
+	 	    						// ^^ get value of keyWord ^^
 	 	    			
 	 	    		}
 	    		}
@@ -60,11 +67,16 @@ public class FileCompressor{
 	}
 	
 	public static void writeToTextFile(List<String> wordList, String fileName)
-			throws IOException{
+			throws IOException {
 		Path path = Paths.get(fileName);
-		try (BufferedWriter writer = Files.newBufferedWriter(path,  ENCODING)) {
-			for ( String word : wordList ) {
-				writer.write(word);
+		try (BufferedWriter writer = Files.newBufferedWriter(path, ENCODING)) {
+			for (String word : wordList) {
+				if(word.equals("lineBreak")) {
+					writer.newLine();
+				} else {
+					writer.write(word);
+				}
+				
 			}
 		}
 		
