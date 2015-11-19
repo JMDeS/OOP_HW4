@@ -13,7 +13,7 @@ public class HW4_4590 {
 
 		/* insert your code here */
 			/* create another dictionary for decompress and name it m2 */
-		Map <Character, String> m2=fs.getDecompressDict();
+		Map <String, String> m2=fs.getDecompressDict();
 		FileCompressor.decompress("compressed.txt", "decompressed.txt",m2);
 	}
 

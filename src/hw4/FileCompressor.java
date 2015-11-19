@@ -17,52 +17,68 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class FileCompressor{
-	private static final String path = "basketball.txt";
-	private static Charset ENCODING = StandardCharsets.UTF_8;
 	
+	private static Charset ENCODING = StandardCharsets.UTF_8;
 	
 	public static void compress(String src, String dest,
 									Map<String, Character> dictionary){
-		FileStats fileStats = new FileStats(path);
+		FileStats fileStats = new FileStats(src);
 		ArrayList<String> wordList = fileStats.getWordList();			
 		File outFile = null;
 			      
 	    try{	         
-		  outFile = new File("compressed.txt");
-	      outFile.createNewFile();
-	      outFile.delete();
-	      outFile.createNewFile();
+		    outFile = new File(dest);
+	        outFile.createNewFile();
+	        outFile.delete();
+	        outFile.createNewFile();
 	      
-	      Set<String> keySet = fileStats.getCompressDict().keySet();
-	    	for ( String word : wordList ) {
-	    		for ( String key : keySet ) {
-	 	    		if ( word.equals(key) ) {
-	 	    			/* sets keyword to its corresponding value 
-	 	    			* and replaces this instance of it with 
-	 	    			* its value in wordList	*/
-	 	    			wordList.set(  
-	 	    						wordList.indexOf(word),		// << index of word
-	 	    						fileStats.getCompressDict().get(word).toString());  
-	 	    						// ^^ get value of keyWord ^^
-	 	    			
-	 	    		}
-	    		}
-		    }
-	        writeToTextFile(wordList,"compressed.txt");
+	        Set<String> keySet = dictionary.keySet();
+			for ( String word : wordList ) {
+				for ( String key : keySet ) {
+					if ( word.equals(key) ) {
+						wordList.set(  // replaces keyword instance with corresponding value
+									wordList.indexOf(word),		// << index of word
+									dictionary.get(word).toString());  
+									// ^^ get value of keyWord ^^
+					}
+				}
+			}
+			writeToTextFile(wordList,dest);
 	    }catch(Exception e){
 	       e.printStackTrace();
-	    }
-
-		
-		
+	    }	
 		
 
 	}
 
 	public static void decompress(String src, String dest,
-									Map<Character, String> dictionary){
+									Map<String, String> m2){
 
-		/* insert your code here */
+		FileStats fileStats = new FileStats(src);
+		ArrayList<String> wordList = fileStats.getWordList();			
+		File outFile = null;
+			      
+	    try{	         
+		    outFile = new File(dest);
+	        outFile.createNewFile();
+	        outFile.delete();
+	        outFile.createNewFile();
+	      
+	        Set<String> keySet = m2.keySet();
+			for ( String word : wordList ) {
+				for ( String key : keySet ) {
+					if ( word.equals(key) ) {
+						wordList.set( // replaces keyword instance with corresponding value
+										wordList.indexOf(word),	// << index of word
+										m2.get(word).toString() 	);
+									  //^ get value of keyword ^
+					}
+				}
+			}
+			writeToTextFile(wordList,dest);
+	    }catch(Exception e){
+	       e.printStackTrace();
+	    }
 
 	}
 	
@@ -74,7 +90,7 @@ public class FileCompressor{
 				if(word.equals("lineBreak")) {
 					writer.newLine();
 				} else {
-					writer.write(word);
+					writer.write(word + " ");
 				}
 				
 			}

@@ -7,11 +7,10 @@ class FileStats{
 	
 	private Scanner input; 
 	private ArrayList <String> wordList=new ArrayList<String>();
-	private ArrayList <Character> punctuation=new ArrayList<Character>();
 	private HashSet <String> wordSet=new HashSet<String>();
 	private ArrayList <Entry<String>> entryList=new ArrayList<Entry<String>>();
 	private Map <String, Character> dictStr2Char=new TreeMap<String, Character>();
-	private Map <Character, String> dictChar2Str=new HashMap<Character, String>();
+	private Map <String, String> dictChar2Str=new HashMap<String, String>();
 	private String lineBreak = "lineBreak"; 
 	
 	private class Entry <T> implements Comparable<Entry<T>>{
@@ -27,7 +26,6 @@ class FileStats{
 	}
 
 	public FileStats(String path) {
-		setupPunctuationList();
 		try {
 			input = new Scanner(new File(path));
 		} catch (FileNotFoundException e) {
@@ -41,7 +39,6 @@ class FileStats{
 				StringTokenizer st = new StringTokenizer(line);
 				while(st.hasMoreTokens()){
 					String nextWord = st.nextToken().toLowerCase();
-					
 					wordList.add(nextWord);
 					wordSet.add(nextWord);
 				
@@ -84,21 +81,20 @@ class FileStats{
 	public Map<String, Character> getCompressDict(){
 		return dictStr2Char;
 	}
-	public Map<Character, String> getDecompressDict(){
+	public Map<String, String> getDecompressDict(){
 		return dictChar2Str;
 	}
 	
 	/*	DO SOMETHING  */
-	public int printDictionary(){ 
-		return 0; // stub
-	}
-	
-	private void setupPunctuationList() {
-		punctuation.add('.');
-		punctuation.add('\'');
-		punctuation.add(',');
-		punctuation.add('?');
-		punctuation.add(';');
+	public void printDictionary(){ 
+		System.out.println("Compression Dictionary");
+		for (String key : dictStr2Char.keySet() ) {
+			System.out.println(key + " : " + dictStr2Char.get(key));
+		}
+		System.out.println("\nDecompression Dictionary");
+		for (String key : dictChar2Str.keySet() ) {
+			System.out.println(key + " : " + dictChar2Str.get(key));
+		}
 	}
 	
 	private void setupDicts(){
@@ -107,10 +103,10 @@ class FileStats{
 		dictStr2Char.put("is", '*');
 		dictStr2Char.put("the", '%');
 		
-		dictChar2Str.put('#', "and");
-		dictChar2Str.put('$', "basketball");
-		dictChar2Str.put('*', "is");
-		dictChar2Str.put('%', "the");
+		dictChar2Str.put("#", "and");
+		dictChar2Str.put("$", "basketball");
+		dictChar2Str.put("*", "is");
+		dictChar2Str.put("%", "the");
 	}
 	
 	ArrayList<String> getWordList(){
