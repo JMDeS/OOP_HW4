@@ -12,6 +12,7 @@ class FileStats{
 	private Map <String, Character> dictStr2Char=new TreeMap<String, Character>();
 	private Map <String, String> dictChar2Str=new HashMap<String, String>();
 	private String lineBreak = "lineBreak"; 
+	private char[] symbols = { '%' , '$' , '#' , '*' };
 	
 	private class Entry <T> implements Comparable<Entry<T>>{
 		public T s;
@@ -50,8 +51,9 @@ class FileStats{
 			// no handler is necessary
 		}
 		
-		setupDicts();
 		count();
+		setupDicts();
+		
 	}
 
 	/*
@@ -68,13 +70,6 @@ class FileStats{
 			int freq = Collections.frequency(wordList,  word);
 			Entry entry = new Entry(word,freq);
 			entryList.add(entry);
-		}
-		
-		Collections.sort(entryList);
-		
-		for (int i = 0; i < 4; i++) {
-			System.out.println(entryList.get(i).s + " appears "
-					+ entryList.get(i).frequency + " time(s).");
 		}
 	}
 
@@ -98,15 +93,13 @@ class FileStats{
 	}
 	
 	private void setupDicts(){
-		dictStr2Char.put("and", '#');
-		dictStr2Char.put("basketball", '$');
-		dictStr2Char.put("is", '*');
-		dictStr2Char.put("the", '%');
 		
-		dictChar2Str.put("#", "and");
-		dictChar2Str.put("$", "basketball");
-		dictChar2Str.put("*", "is");
-		dictChar2Str.put("%", "the");
+		Collections.sort(entryList);
+		
+		for (int i = 0; i < 4; i++) {
+			dictStr2Char.put(entryList.get(i).s, symbols[i]);
+			dictChar2Str.put(Character.toString(symbols[i]) , entryList.get(i).s);
+		}
 	}
 	
 	ArrayList<String> getWordList(){
